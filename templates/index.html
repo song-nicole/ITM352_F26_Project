@@ -1,1 +1,30 @@
 <!--Home page for signing in and other introductary messages to the user-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ground-Work</title>
+</head>
+<body>
+    {% if name %}
+        <h1>Hello, {{ name }}!</h1>
+        <h2>Welcome back to Ground-Work!</h2>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <h1>Welcome to Ground-Work!</h1>
+        <h2>  Your travel planner designed to follow you from brainstorming at home to going on your trip and back!</h2>
+        </br>
+        <p>Please enter your username and access code.</p>
+        <p>   If you don't have one, create one!</p>
+        <form method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <label for="passcode">Access Code:</label>
+            <input type="text" id="passcode" name="passcode">
+            <button type="submit">Continue</button>
+        </form>
+    {% endif %}
+</body>
+</html>
