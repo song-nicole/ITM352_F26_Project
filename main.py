@@ -5,24 +5,12 @@
 #Date: November 26, 2026
 
 from calculations import *  # Imports all functions from calculations.py
+from json_files import *  # Imports all functions from json_files.py
 from flask import Flask, render_template, request, redirect, url_for, session
-import json
 import os
-from pathlib import Path
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "development-only-secret-key")
-
-#Access data from the JSON files
-users_json = Path(__file__).parent / "userDATA" / "users.json"
-def load_users():
-    with open(users_json, "r") as file:
-        return json.load(file)
-
-#Save data to JSON files
-def save_users(users):
-    with open(users_json, "w") as file:
-        json.dump(users, file, indent=4)
 
 #index.html
 @app.route('/', methods=["GET", "POST"])
