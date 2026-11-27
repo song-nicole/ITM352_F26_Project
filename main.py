@@ -25,21 +25,42 @@ def index():
             session["passcode"] = passcode
 
         users = load_users()
+        passcode_exists = False
+        usernum = None
+        for user_name, user_data in users.items():
+            if user_data.get("passcode") == passcode:
+                passcode_exists = True
+                usernum = user_name
+                break
         if name not in users:
-            passcode_exists = False
-            for user_name, user_data in users.items():
-                if user_data.get("passcode") == passcode:
-                    passcode_exists = True
-                    usernum = user_name
-                    break
-
-            if passcode_exists: #User is a new collaborator of an existing travel planner
+            #User is a new collaborator of an existing travel planner
+            if passcode_exists and name not in users[usernum]["collaborators"]:
                 users[usernum]["collaborators"].append(name)
                 save_users(users)
-            else: #New user and travel planner
+            #User is an existing collaborator of an existing travel planner
+            elif passcode_exists and name in users[usernum]["collaborators"]:
+                pass
+            #New user and travel planner
+            else:
                 users[name] = {"passcode": passcode, "collaborators": []}
                 save_users(users)
 
+        """The following block of code is the same as above.
+        If it's removed, the 'if name not in users' block will not work properly."""
+        #Needs furthur investigation to determine why this is the case and try to fix it
+        passcode_exists = False
+        usernum = None
+        for user_name, user_data in users.items():
+            if user_data.get("passcode") == passcode:
+                passcode_exists = True
+                usernum = user_name
+                break
+        if name in users:
+            #Existing user is a new collaborator of an existing travel planner
+            if passcode_exists and name != users[name] and users[name]["passcode"] != passcode:
+                users[usernum]["collaborators"].append(name)
+                save_users(users)
+            
     return render_template(
         "index.html",
         name=session.get("name"),
